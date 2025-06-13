@@ -18,6 +18,6 @@ class Sound extends Model
 
     public function getFilePathAttribute()
     {
-        return asset('storage/sounds/' . $this->file);
+        return asset('storage/' . $this->file);
     }
 }
