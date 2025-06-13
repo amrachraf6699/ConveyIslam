@@ -68,7 +68,7 @@
 
 <body class="bg-islamic-green min-h-screen font-arabic">
     <button id="mobileMenuBtn"
-        class="fixed top-4 right-4 z-50 md:hidden bg-islamic-gold text-islamic-green p-3 rounded-full shadow-lg hover:bg-islamic-gold-hover transition-colors">
+        class="absolute top-4 left-4 z-50 md:hidden bg-islamic-gold text-islamic-green p-3 rounded-full shadow-lg hover:bg-islamic-gold-hover transition-colors">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
@@ -81,26 +81,26 @@
             <!-- Islamic Pattern Background -->
             <div class="islamic-pattern fixed inset-0 pointer-events-none opacity-30"></div>
 
-            <!-- Header -->
-            <header class="relative z-10 mb-8 border-b border-islamic-gold border-opacity-20 pb-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">مرحباً بك، {{ auth()->user()->name }}
-                        </h1>
-                        <p class="text-islamic-light opacity-80" id="currentTime"></p>
-                    </div>
-                    <div class="hidden md:block">
-                        <button id="sidebarToggle"
-                            class="bg-islamic-gold text-islamic-green p-3 rounded-full shadow-lg hover:bg-islamic-gold-hover transition-colors">
-                            <svg class="w-6 h-6 transition-transform duration-300" id="toggleIcon" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </header>
+<!-- Header -->
+<header class="relative z-10 mb-8 border-b border-islamic-gold border-opacity-20 pb-4">
+    <div class="flex items-center justify-start space-x-4 space-x-reverse">
+        <div class="hidden md:block">
+            <button id="sidebarToggle"
+                class="bg-islamic-gold text-islamic-green p-3 rounded-full shadow-lg hover:bg-islamic-gold-hover transition-colors">
+                <svg class="w-6 h-6 transition-transform duration-300" id="toggleIcon" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">مرحباً بك، {{ auth()->user()->name }}
+            </h1>
+            <p class="text-islamic-light opacity-80" id="currentTime"></p>
+        </div>
+    </div>
+</header>
 
             @yield('content')
         </main>
