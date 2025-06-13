@@ -3,7 +3,6 @@
 @section('content')
     <div class="islamic-pattern fixed inset-0 pointer-events-none opacity-30"></div>
 
-    <!-- Header -->
     <header class="relative z-10 mb-8">
         <div class="flex items-center justify-between">
             <div>
@@ -23,7 +22,6 @@
         </div>
     </header>
 
-    <!-- Filters Section -->
     <div class="relative z-10 mb-6">
         <form method="GET" action="">
             <div
@@ -71,12 +69,13 @@
                         <label for="sortBy" class="block text-islamic-light font-medium mb-2">ترتيب حسب</label>
                         <select id="sortBy" name="sortBy"
                             class="px-3 py-2 w-full bg-white bg-opacity-10 border border-islamic-gold border-opacity-30 rounded-xl text-white placeholder-islamic-light placeholder-opacity-60 focus:outline-none focus:ring-2 focus:ring-islamic-gold focus:ring-opacity-50 transition-all">
-                            <option value="name_asc" {{ request('sortBy') == 'name_asc' ? 'selected' : '' }}
-                                class="text-islamic-gold bg-islamic-dark-green" selected>الاسم (أ - ي)
+                            <option value="name_asc" {{ request('sortBy') == 'name_asc' || !request('sortBy') ? 'selected' : '' }}
+                                class="text-islamic-gold bg-islamic-dark-green">الاسم (أ - ي)
                             </option>
                             <option value="name_desc" {{ request('sortBy') == 'name_desc' ? 'selected' : '' }}
                                 class="text-islamic-gold bg-islamic-dark-green">الاسم (ي - أ)</option>
-                            <option value="date_desc" class="text-islamic-gold bg-islamic-dark-green">الأحدث</option>
+                            <option value="date_desc" {{ request('sortBy') == 'date_desc' ? 'selected' : '' }}
+                                class="text-islamic-gold bg-islamic-dark-green">الأحدث</option>
                             <option value="date_asc" {{ request('sortBy') == 'date_asc' ? 'selected' : '' }}
                                 class="text-islamic-gold bg-islamic-dark-green">الأقدم</option>
                             <option value="sounds_desc" {{ request('sortBy') == 'sounds_desc' ? 'selected' : '' }}
@@ -105,7 +104,6 @@
         </form>
     </div>
 
-    <!-- Table Container -->
     <div class="relative z-10 mb-6">
         <div
             class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-islamic-gold border-opacity-20">
@@ -156,14 +154,18 @@
                                 </td>
                                 <td>
                                     <div class="flex justify-center space-x-2 space-x-reverse">
-                                        <button class="action-button edit" title="تعديل">
+                                        <a href="{{ route('dashboard.languages.edit' , $language) }}" class="action-button edit" title="تعديل">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                                 </path>
                                             </svg>
-                                        </button>
-                                        <button class="action-button delete" title="حذف">
+                                        </a>
+                                        <button class="action-button delete" 
+                                                title="حذف"
+                                                data-language-id="{{ $language->id }}"
+                                                data-language-name="{{ $language->native_name }}"
+                                                onclick="showDeleteModal({{ $language->id }}, '{{ $language->native_name }}')">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -184,44 +186,142 @@
                 </table>
             </div>
 
-            <!-- Pagination Controls -->
-            <div class="flex flex-wrap items-center justify-between mt-6 gap-4">
-                <div class="text-islamic-light text-sm">
-                    عرض <span class="font-bold">1</span> إلى <span class="font-bold">2</span> من <span
-                        class="font-bold">24</span> لغة
-                </div>
+            @if($languages->hasPages())
+                <div class="flex flex-wrap items-center justify-between mt-6 gap-4">
+                    <div class="text-islamic-light text-sm">
+                        عرض <span class="font-bold">{{ $languages->firstItem() }}</span> إلى <span class="font-bold">{{ $languages->lastItem() }}</span> من <span class="font-bold">{{ $languages->total() }}</span> لغة
+                    </div>
 
-                <div class="flex items-center space-x-1 space-x-reverse">
-                    <button
-                        class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors"
-                        disabled>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
+                    <div class="flex items-center space-x-1 space-x-reverse">
+                        @if ($languages->onFirstPage())
+                            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 border border-gray-600 border-opacity-20 cursor-not-allowed">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </span>
+                        @else
+                            <a href="{{ $languages->previousPageUrl() }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </a>
+                        @endif
+
+                        @foreach ($languages->getUrlRange(1, $languages->lastPage()) as $page => $url)
+                            @if ($page == $languages->currentPage())
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-dark-green bg-islamic-gold font-bold">{{ $page }}</span>
+                            @else
+                                <a href="{{ $url }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors">{{ $page }}</a>
+                            @endif
+                        @endforeach
+
+                        @if ($languages->hasMorePages())
+                            <a href="{{ $languages->nextPageUrl() }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                        @else
+                            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 border border-gray-600 border-opacity-20 cursor-not-allowed">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 max-w-md w-full mx-4 border border-islamic-gold border-opacity-20">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 bg-opacity-20 mb-4">
+                    <svg class="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
+                
+                <h3 class="text-lg font-bold text-white mb-2">تأكيد الحذف</h3>
+                
+                <p class="text-islamic-light mb-6">
+                    هل أنت متأكد من حذف اللغة "<span id="languageNameToDelete" class="font-bold text-islamic-gold"></span>"؟
+                    <br>
+                    <span class="text-sm text-red-300">لا يمكن التراجع عن هذا الإجراء.</span>
+                </p>
+                
+                <div class="flex justify-center space-x-4 space-x-reverse">
+                    <button onclick="hideDeleteModal()" 
+                            class="px-6 py-2 bg-gray-500 bg-opacity-20 text-islamic-light rounded-lg hover:bg-opacity-30 transition-colors">
+                        إلغاء
                     </button>
-                    <button
-                        class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-dark-green bg-islamic-gold font-bold">1</button>
-                    <button
-                        class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors">2</button>
-                    <button
-                        class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors">3</button>
-                    <span class="text-islamic-light px-2">...</span>
-                    <button
-                        class="w-8 h-8 rounded-lg flex items-center justify-center text-islamic-light border border-islamic-gold border-opacity-20 hover:bg-islamic-gold hover:bg-opacity-10 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                            </path>
-                        </svg>
+                    <button onclick="confirmDelete()" 
+                            class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        حذف
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
 @endsection
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard/languages/index.css') }}">
 @endpush
 
 @push('scripts')
     <script src="{{ asset('js/dashboard/languages/index.js') }}"></script>
+    <script>
+        let languageIdToDelete = null;
+        
+        function showDeleteModal(languageId, languageName) {
+            languageIdToDelete = languageId;
+            document.getElementById('languageNameToDelete').textContent = languageName;
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.getElementById('deleteModal').classList.add('flex');
+        }
+        
+        function hideDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').classList.remove('flex');
+            languageIdToDelete = null;
+        }
+        
+        function confirmDelete() {
+            if (languageIdToDelete) {
+                const form = document.getElementById('deleteForm');
+                form.action = `/dashboard/languages/${languageIdToDelete}`;
+                form.submit();
+            }
+        }
+        
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideDeleteModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideDeleteModal();
+            }
+        });
+        
+        document.getElementById('clearFilters').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            document.getElementById('search').value = '';
+            document.getElementById('hasAudio').value = '';
+            document.getElementById('sortBy').value = 'name_asc';
+            
+            window.location.href = '{{ route("dashboard.languages.index") }}';
+        });
+    </script>
 @endpush
