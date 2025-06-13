@@ -40,7 +40,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-islamic-light opacity-80 text-sm">عدد المسؤولين</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($languages_count) }}</p>
+                    <p class="text-2xl font-bold text-white">{{ number_format($admins_count) }}</p>
                 </div>
                 <div class="bg-islamic-gold bg-opacity-20 p-3 rounded-full">
                     <svg class="w-6 h-6 text-islamic-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
