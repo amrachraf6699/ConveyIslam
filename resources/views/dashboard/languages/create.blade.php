@@ -122,7 +122,7 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-white font-medium mb-3">اسم الصوت *</label>
-                                        <input type="text" name="sound_names[]" required 
+                                        <input type="text" name="sound_names[]" 
                                             class="p-3 rounded-xl bg-white bg-opacity-10 border border-yellow-400 border-opacity-20 text-white w-full focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50"
                                             placeholder="أدخل اسم الصوت">
                                     </div>
@@ -130,7 +130,7 @@
                                     <div>
                                         <label class="block text-white font-medium mb-3">الملف الصوتي *</label>
                                         <div class="drop-zone rounded-xl p-3 text-center cursor-pointer sound-drop-zone bg-white bg-opacity-10 border border-yellow-400 border-opacity-20 hover:bg-opacity-15 transition-all">
-                                            <input type="file" name="sound_files[]" accept="audio/*" class="hidden sound-file-input" required>
+                                            <input type="file" name="sound_files[]" accept="audio/*" class="hidden sound-file-input">
                                             <div class="sound-upload-area">
                                                 <svg class="w-6 h-6 text-yellow-400 opacity-80 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
