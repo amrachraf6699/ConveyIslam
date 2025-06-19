@@ -23,7 +23,7 @@ class UpdateSoundRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:mp3,wav,ogg|max:10240',
+            'file' => 'nullable|file|mimes:m4a,mp3,wav,ogg|max:10240',
         ];
     }
 
@@ -32,7 +32,7 @@ class UpdateSoundRequest extends FormRequest
         return [
             'name.required' => 'اسم الصوت مطلوب',
             'file.file' => 'الملف يجب أن يكون ملفًا',
-            'file.mimes' => 'الملف يجب أن يكون من نوع mp3, wav, أو ogg',
+            'file.mimes' => 'الملف يجب أن يكون من نوع m4a, mp3, wav, أو ogg',
             'file.max' => 'حجم الملف يجب أن لا يتجاوز 2 ميجابايت',
         ];
     }

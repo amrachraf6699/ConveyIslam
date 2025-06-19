@@ -26,11 +26,11 @@ class StoreLanguageRequest extends FormRequest
             'flag' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'english_name' => 'required|string|max:255',
             'native_name' => 'required|string|max:255',
-            'sound' => 'required|file|mimes:mp3,wav,ogg|max:10240',
+            'sound' => 'required|file|mimes:m4a,mp3,wav,ogg|max:10240',
             'sound_names' => 'required|array|min:1',
             'sound_names.*' => 'required|string|max:255',
             'sound_files' => 'required|array|min:1',
-            'sound_files.*' => 'required|file|mimes:mp3,wav,ogg|max:10240',
+            'sound_files.*' => 'required|file|mimes:m4a,mp3,wav,ogg|max:10240',
         ];
     }
 

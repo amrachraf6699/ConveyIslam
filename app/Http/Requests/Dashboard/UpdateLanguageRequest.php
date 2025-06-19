@@ -25,10 +25,10 @@ class UpdateLanguageRequest extends FormRequest
             'english_name' => 'required|string|max:255',
             'native_name' => 'required|string|max:255',
             'flag' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'sound' => 'nullable|file|mimes:mp3,wav,ogg|max:10240',
+            'sound' => 'nullable|file|mimes:m4a,mp3,wav,ogg|max:10240',
             'new_sounds' => 'nullable|array',
             'new_sounds.*.name' => 'required|string|max:255',
-            'new_sounds.*.file' => 'required|file|mimes:mp3,wav,ogg|max:10240',
+            'new_sounds.*.file' => 'required|file|mimes:m4a,mp3,wav,ogg|max:10240',
         ];
     }
 
@@ -41,7 +41,7 @@ class UpdateLanguageRequest extends FormRequest
             'flag.mimes' => 'الصورة يجب أن تكون من نوع jpeg, png, jpg, أو gif',
             'flag.max' => 'حجم الصورة يجب أن لا يتجاوز 5 ميجابايت',
             'sound.file' => 'الملف الصوتي يجب أن يكون ملفًا',
-            'sound.mimes' => 'الملف الصوتي يجب أن يكون من نوع mp3, wav, أو ogg',
+            'sound.mimes' => 'الملف الصوتي يجب أن يكون من نوع m4a, mp3, wav, أو ogg',
             'sound.max' => 'حجم الملف الصوتي يجب أن لا يتجاوز 10 ميجابايت',
             'new_sounds.*.name.required' => 'اسم الصوت الجديد مطلوب',
             'new_sounds.*.file.required' => 'ملف الصوت الجديد مطلوب',
