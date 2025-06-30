@@ -13,8 +13,7 @@ class LanguagesController extends APIBaseController
     public function index()
     {
         try {
-            $languages = Language::withCount('sounds')
-                ->paginate(10);
+            $languages = Language::withCount('sounds')->get();
 
             return $this->success(200, 'Languages retrieved successfully', LanguagesResource::collection($languages));
         } catch (\Exception $e) {
